@@ -1,0 +1,20 @@
+name: guard
+# The only workflow on main. It checks that a validation pull request keeps the
+# resource rules in README.md, and costs one short Linux job.
+on:
+  pull_request:
+concurrency:
+  group: guard-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  rules:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Workflow resource rules
+        run: |
+          python3 -c "import yaml" 2>/dev/null || python3 -m pip install --quiet pyyaml
+          python3 .github/tools/check_workflows.py
