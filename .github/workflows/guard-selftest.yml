@@ -1,0 +1,12 @@
+name: guard-selftest
+# Deliberately breaks the rules; the push filter names a branch that never exists,
+# so this workflow itself never runs.
+on:
+  push:
+    branches: [never-a-branch]
+jobs:
+  noop:
+    runs-on: macos-15
+    steps:
+      - uses: actions/upload-artifact@v4
+        with: { name: x, path: x }
